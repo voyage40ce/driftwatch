@@ -1,0 +1,19 @@
+# Example drift-ignore policy file for driftwatch
+# Place this file alongside your config files and pass it with:
+#   driftwatch policy apply expected.yaml actual.yaml example_policy.yaml
+
+env: production
+
+ignore:
+  # Ignore all feature-flag keys — managed via a separate service
+  - pattern: "feature_flags.*"
+    reason: "Feature flags are managed by LaunchDarkly"
+
+  # Ignore the auto-incremented build identifier
+  - pattern: "^build\.id$"
+    match_type: regex
+    reason: "Build ID changes on every deploy"
+
+  # Ignore any key ending in _secret or _token (short-hand string form)
+  - "*_secret"
+  - "*_token"
