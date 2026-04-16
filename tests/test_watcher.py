@@ -88,6 +88,24 @@ def test_watch_no_clear_callback_without_prior_drift():
 
     with patch("driftwatch.watcher._load_and_diff", return_value=clean_report):
         with patch("driftwatch.watcher.time.sleep"):
-            watch(_make_opts(on_clear=on_clear, max_iterations=2))
+            watch(_make_opts(on_clear=on_clear, max_iterations=1))
 
     on_clear.assert_not_called()
+
+
+def test_watch_sleeps_between_iterations():
+    """Ensure watch respects the configured interval between iterations."""
+    clean_report = DriftReport(changes=[])
+    opts = WatchOptions(
+        source="src.yaml",
+        deployed="dep.yaml",
+        interval=5.0,
+        max_iterations=2,
+    )
+
+    with patch("driftwatch.watcher._load_and_diff", return_value=clean_report):
+        with patch("driftwatch.watcher.time.sleep") as mock_sleep:
+            watch(opts)
+
+    mock_sleep.assert_called_with(5.0)
+    assert mock_sleep.call_count == 2
