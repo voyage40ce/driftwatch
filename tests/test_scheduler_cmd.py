@@ -61,6 +61,21 @@ def test_dispatch_returns_two_on_fatal_error():
     assert result == 2
 
 
+def test_dispatch_passes_source_and_deployed():
+    """Ensure source and deployed paths are forwarded to run_scheduler."""
+    captured = {}
+
+    def fake_run(opts, stop_event=None):
+        captured["source"] = opts.source
+        captured["deployed"] = opts.deployed
+
+    with patch("driftwatch.commands.scheduler_cmd.run_scheduler", side_effect=fake_run):
+        _dispatch(_ns(source="custom_source.yaml", deployed="custom_deployed.yaml"))
+
+    assert captured["source"] == "custom_source.yaml"
+    assert captured["deployed"] == "custom_deployed.yaml"
+
+
 def test_register_adds_schedule_subcommand():
     parser = argparse.ArgumentParser()
     subs = parser.add_subparsers()
