@@ -59,6 +59,14 @@ def test_load_diffs_respects_limit(store_dir):
     assert len(results) == 3
 
 
+def test_load_diffs_returns_stored_diff_instances(store_dir):
+    """Each entry returned by load_diffs should be a StoredDiff instance."""
+    record_diff(_clean_report(), "staging", base_dir=store_dir)
+    record_diff(_drift_report(), "staging", base_dir=store_dir)
+    results = load_diffs("staging", base_dir=store_dir)
+    assert all(isinstance(r, StoredDiff) for r in results)
+
+
 def test_clear_diffs_returns_count(store_dir):
     record_diff(_clean_report(), "staging", base_dir=store_dir)
     record_diff(_drift_report(), "staging", base_dir=store_dir)
