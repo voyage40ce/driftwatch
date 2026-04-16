@@ -1,0 +1,14 @@
+{
+  "env": "staging",
+  "timestamp": 1700000000.0,
+  "metadata": {
+    "python_version": "3.11.4",
+    "platform": "Linux",
+    "hostname": "ci-runner-01",
+    "env_vars": {
+      "APP_ENV": "staging",
+      "APP_LOG_LEVEL": "info"
+    },
+    "version": "2.4.1"
+  }
+}
