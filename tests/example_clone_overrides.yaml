@@ -1,0 +1,17 @@
+# Example overrides file referenced in documentation.
+# Each entry shows a dot-notation key and its replacement value
+# when cloning a production config to staging.
+#
+# Usage:
+#   driftwatch clone prod.yaml prod staging \
+#     --set db.host=staging-db.internal \
+#     --set db.port=5433 \
+#     --set debug=true \
+#     --out staging.yaml
+
+db:
+  host: staging-db.internal
+  port: 5433
+debug: true
+logging:
+  level: DEBUG
