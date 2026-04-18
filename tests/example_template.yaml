@@ -1,0 +1,17 @@
+# Example driftwatch config template
+app:
+  name: "{{ APP_NAME }}"
+  version: "{{ APP_VERSION }}"
+
+database:
+  host: "{{ DB_HOST }}"
+  port: "{{ DB_PORT }}"
+  name: "{{ DB_NAME }}"
+
+logging:
+  level: "{{ LOG_LEVEL }}"
+  format: json
+
+feature_flags:
+  new_ui: "{{ FEATURE_NEW_UI }}"
+  beta_api: false
