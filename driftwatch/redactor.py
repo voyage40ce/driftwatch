@@ -36,6 +36,11 @@ def _compile(patterns: list[str], case_sensitive: bool) -> list[re.Pattern]:
         raise RedactorError(f"Invalid redaction pattern: {exc}") from exc
 
 
+def _is_sensitive(key: str, compiled: list[re.Pattern]) -> bool:
+    """Return True if *key* matches any of the compiled sensitive patterns."""
+    return any(p.search(key) for p in compiled)
+
+
 def redact_dict(
     data: dict[str, Any],
     opts: RedactOptions | None = None,
@@ -51,7 +56,7 @@ def redact_dict(
     for key, value in data.items():
         if isinstance(value, dict):
             result[key] = redact_dict(value, opts, _compiled)
-        elif any(p.search(str(key)) for p in _compiled):
+        elif _is_sensitive(str(key), _compiled):
             result[key] = opts.placeholder
         else:
             result[key] = value
@@ -67,6 +72,6 @@ def redact_flat(
         opts = RedactOptions()
     compiled = _compile(opts.patterns, opts.case_sensitive)
     return {
-        k: (opts.placeholder if any(p.search(k) for p in compiled) else v)
+        k: (opts.placeholder if _is_sensitive(k, compiled) else v)
         for k, v in flat.items()
     }
