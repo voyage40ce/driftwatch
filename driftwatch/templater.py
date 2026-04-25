@@ -21,6 +21,11 @@ class RenderResult:
     substitutions: dict[str, str] = field(default_factory=dict)
     unresolved: list[str] = field(default_factory=list)
 
+    @property
+    def has_unresolved(self) -> bool:
+        """Return True if any template variables could not be resolved."""
+        return bool(self.unresolved)
+
 
 _VAR_RE = re.compile(r"\{\{\s*([\w.]+)\s*\}\}")
 
