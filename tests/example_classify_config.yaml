@@ -1,0 +1,21 @@
+# Example configs used in classifier documentation / manual testing
+
+# source-of-truth (source.yaml)
+---
+app:
+  name: driftwatch
+  port: 8080
+  debug: false
+
+db:
+  host: db.internal
+  port: 5432
+  password: s3cr3t
+
+auth:
+  token: abc123
+  session_timeout: 3600
+
+feature_flags:
+  new_ui: false
+  beta_mode: false
