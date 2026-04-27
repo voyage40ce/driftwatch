@@ -24,6 +24,7 @@ def _add_archiver_parser(sub: argparse._SubParsersAction) -> None:
 
     clr = s.add_parser("clear", help="Delete archived reports")
     clr.add_argument("--env", default=None, help="Filter by environment")
+    clr.add_argument("--yes", action="store_true", help="Skip confirmation prompt")
 
 
 def _dispatch(ns: argparse.Namespace) -> int:
@@ -62,6 +63,13 @@ def _cmd_list(ns: argparse.Namespace) -> int:
 
 
 def _cmd_clear(ns: argparse.Namespace) -> int:
+    """Delete archived reports, prompting for confirmation unless --yes is given."""
+    if not ns.yes:
+        scope = f"env={ns.env}" if ns.env else "ALL environments"
+        answer = input(f"Delete archives for {scope}? [y/N] ").strip().lower()
+        if answer != "y":
+            print("aborted")
+            return 0
     removed = clear_archives(env=ns.env)
     print(f"removed {removed} archive(s)")
     return 0
